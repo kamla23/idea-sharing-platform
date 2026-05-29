@@ -64,7 +64,6 @@ async function login(event) {
     const data = await res.json();
 
     if (res.ok) {
-      localStorage.setItem("token", data.accessToken);
       alert("Login successful ");
       window.location.href = "explore.html"; 
     } else {
@@ -76,7 +75,6 @@ async function login(event) {
     alert("Server error: Connection failed!");
   }
 }
-
 
 window.addEventListener('DOMContentLoaded', () => {
   const signupForm = document.getElementById("signup-form");

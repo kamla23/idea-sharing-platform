@@ -1,49 +1,48 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* Navbar ka main layout */
 .navbar {
-  background: #0f172a;
-  padding: 15px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 15px 30px;
+  background-color: #1a1a2e; /* Jo bhi aapka navbar background color ho */
+  color: white;
 }
 
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.mind {
-  color: #6122c5;
-}
-
-.meld {
-  color: #e7d3c7;
-}
-
-
+/* Menu list jisme saare links hain */
 .menu {
-  list-style: none;
   display: flex;
-  gap: 20px;
+  list-style: none;
+  align-items: center;
+  gap: 20px; /* Saare menu items ke beech ka gap */
+  margin: 0;
+  padding: 0;
+}
+
+/* Individual list item (li) ke liye */
+.menu li {
+  display: inline-flex;
   align-items: center;
 }
 
+/* Links aur icons ka adjustment */
 .menu li a {
   color: white;
   text-decoration: none;
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Icon aur Text ke beech ka space */
+  font-size: 1rem;
+  transition: color 0.3s ease;
 }
 
+/* Hover effect */
 .menu li a:hover {
-  color: #22c55e;
+  color: #2ecc71; /* MindMeld ka green accent color */
 }
 
+/* User-name ka style jo login ke baad dikhega */
 #user-name {
-  color: #22c55e;
   font-weight: bold;
+  color: #2ecc71;
+  font-size: 1rem;
 }

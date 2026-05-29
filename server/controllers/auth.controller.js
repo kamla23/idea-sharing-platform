@@ -120,3 +120,28 @@ export const getMe = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// 🔥 Naya logout function aapke controller ke format mein
+export const logout = async (req, res) => {
+  try {
+    // 1. Dono cookies (accessToken aur refreshToken) ko clear karna hoga
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Deployed par automatic true ho jayega
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+    });
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+    });
+
+    return res.status(200).json({ 
+      success: true, 
+      message: "Logged out successfully!" 
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
