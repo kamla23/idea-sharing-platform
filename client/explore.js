@@ -1,14 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
     const box = document.getElementById("ideas-container");
     const filter = document.getElementById("category-filter");
-    const URL = "http://192.168.10.89:3000/api";
     
-    // 🌟 1. GLOBAL LOGIN USERNAME (Asli login karne wale ka naam isme save hoga)
+
+    const URL = "https://idea-sharing-platform-backend.onrender.com/api";
+    
+   
     let user = "Reena"; 
     let currentEditId = null;
-    let localLikedIdeas = new Set(); // 1 baar se zyada like rokne ke liye
+    let localLikedIdeas = new Set(); 
 
-    // 🌟 2. AAPKA ORIGINAL DUMMY DATA ARRAY (Jise maine wapas jodd diya hai)
+  
     const dummyIdeas = [
         {
             _id: "1",
@@ -47,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     ];
 
-    // 🌟 3. SYSTEM GENERATED POPUP MODAL HTML
     const modal = document.createElement("div");
     modal.style = "display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(3px);";
     modal.innerHTML = `
@@ -80,14 +81,14 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     document.body.appendChild(modal);
 
-    // 🔒 4. COOKIE CHECK (Real Logged-In User Name Fetching)
+
     async function checkAuth() {
         try {
             const res = await fetch(`${URL}/auth/me`, { method: "GET", credentials: "include" });
             if (res.ok) {
                 const data = await res.json();
                 if (data && data.username) {
-                    user = data.username; // Database se jo user login hua h uska real name
+                    user = data.username; 
                 }
             }
         } catch (err) { 
@@ -96,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         getIdeas(); 
     }
 
-    // 🔄 5. FETCH IDEAS
+
     async function getIdeas() {
         try {
             const res = await fetch(`${URL}/ideas`, { method: "GET", credentials: "include" });
@@ -116,7 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
         render(val === "all" ? all : all.filter(i => i.category === val));
     }
 
-    // 🎴 6. RENDER DYNAMIC CARDS
     function render(data) {
         box.innerHTML = ""; 
         data.forEach(item => {
@@ -130,7 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
             let cmtsHTML = "";
             if (item.comments && item.comments.length > 0) {
                 item.comments.forEach(c => {
-                    // 🌟 Jisne comment kiya uska sahi naam show karne ke liye (c.username || c.user)
                     const cmtUser = c.username || c.user || "Guest";
                     cmtsHTML += `<div style="margin-bottom:8px; line-height:1.4;"><i class="fa-regular fa-comment-dots" style="color:#94a3b8; margin-right:4px;"></i> <strong>${cmtUser}:</strong> <span>${c.text}</span></div>`;
                 });
@@ -182,25 +181,24 @@ document.addEventListener("DOMContentLoaded", () => {
         actions();
     }
 
-    // ⚡ 7. LOGIC ACTIONS HANDLING
+
     function actions() {
-        // 🌟 LIKE FUNCTION (Strictly 1 Bar Click validation, No un-liking/None layout)
         document.querySelectorAll(".like-btn").forEach(b => {
             b.onclick = async function() {
                 const id = this.getAttribute("data-id");
                 
                 if (localLikedIdeas.has(id)) {
                     alert("⚠️ You have already liked this idea once!");
-                    return; // Dubara click karne pe yahin se block ho jayega
+                    return; 
                 }
 
                 localLikedIdeas.add(id);
                 const icon = this.querySelector("i");
                 const countSpan = this.querySelector(".like-count");
                 
-                icon.className = "fa-solid fa-heart"; // Dil pakka solid red ho jayega
+                icon.className = "fa-solid fa-heart"; 
                 icon.style.color = "#dc2626";
-                countSpan.innerText = parseInt(countSpan.innerText) + 1; // +1 strictly
+                countSpan.innerText = parseInt(countSpan.innerText) + 1; 
 
                 try {
                     await fetch(`${URL}/ideas/${id}/like`, { method: "POST", credentials: "include" });
@@ -208,7 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         });
 
-        // 🌟 COMMENT FUNCTION (Login karne wale user ka real username append hoga)
         document.querySelectorAll(".cmt-btn").forEach(b => {
             b.onclick = async function() {
                 const id = this.getAttribute("data-id");
@@ -219,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     const cmtBox = card.querySelector(".cmt-box");
                     const cmtCount = card.querySelector(".cmt-count");
 
-                    // Instantly append current login user name to screen
                     const currentHTML = cmtBox.innerHTML;
                     cmtBox.innerHTML = currentHTML + `<div style="margin-bottom:8px; line-height: 1.4;"><i class="fa-regular fa-comment-dots" style="color: #94a3b8; margin-right: 4px;"></i> <strong>${user}:</strong> <span>${msg.trim()}</span></div>`;
                     cmtBox.style.display = "block";
@@ -237,7 +233,6 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         });
 
-        // Custom Delete Triggers (Cancel / Delete system)
         document.querySelectorAll(".del-trigger-btn").forEach(b => {
             b.onclick = function() {
                 const card = document.getElementById(`card-${this.getAttribute("data-id")}`);
@@ -264,7 +259,6 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         });
 
-        // Open Edit Modal Popup Form
         document.querySelectorAll(".edit-btn").forEach(b => {
             b.onclick = function() {
                 currentEditId = this.getAttribute("data-id");
@@ -277,7 +271,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Modal Actions (Save & Cancel)
     document.getElementById("pop-cancel").onclick = () => modal.style.display = "none";
 
     document.getElementById("pop-save").onclick = async () => {
