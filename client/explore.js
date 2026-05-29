@@ -4,47 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const URL = "https://idea-sharing-platform-backend.onrender.com/api";
     
-    let user = "Reena"; 
+    let user = "Guest"; 
     let currentEditId = null;
     let localLikedIdeas = new Set(); 
 
-    const dummyIdeas = [
-        {
-            _id: "1",
-            title: "Smart Irrigation System",
-            description: "An automated watering system for farmers using IoT soil moisture sensors.",
-            category: "Technology",
-            author: "Rahul",
-            tags: ["#IoT", "#AgroTech"],
-            likes: 12,
-            comments: [
-                { username: "Kamla", text: "This will save a lot of water!" },
-                { username: "Amit", text: "Great innovation." }
-            ]
-        },
-        {
-            _id: "2",
-            title: "AI Medical Diagnostics",
-            description: "Using deep learning to detect early-stage lung diseases from X-rays.",
-            category: "Science",
-            author: "Priya",
-            tags: ["#AI", "#Healthcare"],
-            likes: 25,
-            comments: [
-                { username: "Rohan", text: "Very useful for rural areas." }
-            ]
-        },
-        {
-            _id: "3",
-            title: "Green Tech Plastic",
-            description: "Creating 100% biodegradable plastic bottles from seaweed extract.",
-            category: "Science",
-            author: "Sneha",
-            tags: ["#Eco", "#BioTech"],
-            likes: 18,
-            comments: []
-        }
-    ];
 
     const modal = document.createElement("div");
     modal.style = "display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(3px);";
@@ -78,40 +41,68 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     document.body.appendChild(modal);
 
+    function getHeaders(extraHeaders = {}) {
+        const token = localStorage.getItem("token");
+        const headers = { ...extraHeaders };
+        if (token) {
+            headers["Authorization"] = `Bearer ${token}`;
+        }
+        return headers;
+    }
+
     async function checkAuth() {
         try {
-            const res = await fetch(`${URL}/auth/me`, { method: "GET", credentials: "include" });
+            const res = await fetch(`${URL}/auth/me`, { 
+                method: "GET", 
+                headers: getHeaders() 
+            });
             if (res.ok) {
                 const data = await res.json();
                 if (data && data.username) {
                     user = data.username; 
+                    console.log("Logged in user verified:", user);
                 }
             } else {
-                console.log("Not logged in. Using Guest/Default session profile.");
+                user = "Guest";
             }
         } catch (err) { 
-            console.log("Auth check skipped, offline/bypass mode active."); 
+            user = "Guest";
+            console.log("Auth bypass mode active."); 
         }
         getIdeas(); 
     }
 
     async function getIdeas() {
         try {
-            const res = await fetch(`${URL}/ideas`, { method: "GET", credentials: "include" });
+            const res = await fetch(`${URL}/ideas`, { 
+                method: "GET",
+                headers: getHeaders()
+            });
             if(res.ok) {
                 const data = await res.json();
-                showFiltered(data && data.length > 0 ? data : dummyIdeas);
+                showFiltered(data && data.length > 0 ? data : []);
             } else {
-                showFiltered(dummyIdeas);
+                showFiltered([]);
             }
         } catch (err) {
-            showFiltered(dummyIdeas);
+            showFiltered([]);
         }
     }
 
     function showFiltered(all) {
         const val = filter.value;
-        render(val === "all" ? all : all.filter(i => i.category === val));
+        const filteredData = val === "all" ? all : all.filter(i => i.category === val);
+        
+        if (filteredData.length === 0) {
+            box.innerHTML = `
+                <div style="text-align:center; padding:50px 20px; color:#64748b; font-size:16px; width:100%; grid-column: 1 / -1;">
+                    <i class="fa-regular fa-lightbulb" style="font-size: 40px; color: #cbd5e1; margin-bottom: 15px; display: block;"></i>
+                     No live ideas found in this category. Be the first to share one!
+                </div>`;
+            return;
+        }
+        
+        render(filteredData);
     }
 
     function render(data) {
@@ -133,8 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const isLiked = localLikedIdeas.has(item._id);
-            
-       
             const displayAuthor = item.author?.username || item.author || 'Unknown';
 
             card.innerHTML = `
@@ -182,51 +171,54 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function actions() {
- document.querySelectorAll(".like-btn").forEach(b => {
-    b.onclick = async function() {
-        const id = this.getAttribute("data-id");
-        const icon = this.querySelector("i");
-        const countSpan = this.querySelector(".like-count");
-        
+        document.querySelectorAll(".like-btn").forEach(b => {
+            b.onclick = async function() {
+                if (!localStorage.getItem("token") || user === "Guest") {
+                    alert("Please Login first to like ideas!");
+                    window.location.href = "login.html";
+                    return;
+                }
 
-        if (!user || user === "Reena") {
-            alert("Please Login first to like or interact with ideas!");
-            window.location.href = "login.html";
-            return;
-        }
+                const id = this.getAttribute("data-id");
+                const icon = this.querySelector("i");
+                const countSpan = this.querySelector(".like-count");
+                
+                let currentLikes = parseInt(countSpan.innerText);
+                if (isNaN(currentLikes)) currentLikes = 0;
 
-        let currentLikes = parseInt(countSpan.innerText);
-        if (isNaN(currentLikes)) currentLikes = 0;
+                if (localLikedIdeas.has(id)) {
+                    localLikedIdeas.delete(id);
+                    icon.className = "fa-regular fa-heart";
+                    icon.style.color = "#64748b";
+                    currentLikes = Math.max(0, currentLikes - 1);
+                } else {
+                    localLikedIdeas.add(id);
+                    icon.className = "fa-solid fa-heart";
+                    icon.style.color = "#dc2626";
+                    currentLikes = currentLikes + 1;
+                }
 
-      
-        if (localLikedIdeas.has(id)) {
-            localLikedIdeas.delete(id);
-            icon.className = "fa-regular fa-heart";
-            icon.style.color = "#64748b";
-            currentLikes = Math.max(0, currentLikes - 1);
-        } else {
-            localLikedIdeas.add(id);
-            icon.className = "fa-solid fa-heart";
-            icon.style.color = "#dc2626";
-            currentLikes = currentLikes + 1;
-        }
+                countSpan.innerText = currentLikes;
 
- 
-        countSpan.innerText = currentLikes;
-
-        try {
-            await fetch(`${URL}/ideas/${id}/like`, { 
-                method: "POST", 
-                credentials: "include" 
-            });
-        } catch (err) { 
-            console.error("Backend sync failed:", err); 
-        }
-    };
-});
+                try {
+                    await fetch(`${URL}/ideas/${id}/like`, { 
+                        method: "POST", 
+                        headers: getHeaders()
+                    });
+                } catch (err) { 
+                    console.error("Backend sync failed:", err); 
+                }
+            };
+        });
 
         document.querySelectorAll(".cmt-btn").forEach(b => {
             b.onclick = async function() {
+                if (!localStorage.getItem("token") || user === "Guest") {
+                    alert("🔒 Please Login first to comment!");
+                    window.location.href = "login.html";
+                    return;
+                }
+
                 const id = this.getAttribute("data-id");
                 const msg = prompt(`Commenting as: ${user}`); 
                 
@@ -243,8 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     try {
                         await fetch(`${URL}/ideas/${id}/comment`, {
                             method: "POST",
-                            headers: { 'Content-Type': 'application/json' },
-                            credentials: "include",
+                            headers: getHeaders({ 'Content-Type': 'application/json' }),
                             body: JSON.stringify({ text: msg.trim() })
                         });
                     } catch (err) { console.error(err); }
@@ -273,7 +264,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 const id = this.getAttribute("data-id");
                 document.getElementById(`card-${id}`).remove();
                 try {
-                    await fetch(`${URL}/ideas/${id}`, { method: "DELETE", credentials: "include" });
+                    await fetch(`${URL}/ideas/${id}`, { 
+                        method: "DELETE", 
+                        headers: getHeaders()
+                    });
                 } catch (err) { console.error(err); }
             };
         });
@@ -315,8 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             await fetch(`${URL}/ideas/${currentEditId}`, {
                 method: "PUT",
-                headers: { 'Content-Type': 'application/json' },
-                credentials: "include",
+                headers: getHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({ title: t, category: c, tags: tagsArr, description: d })
             });
             getIdeas();
