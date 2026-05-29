@@ -1,3 +1,4 @@
+const API = "https://idea-sharing-platform-backend.onrender.com";
 
 async function signup(event) {
   if (event) event.preventDefault(); 
@@ -13,7 +14,7 @@ async function signup(event) {
   }
 
   try {
-    const res = await fetch("http://192.168.10.89:3000/api/auth/signup", {
+ const res = await fetch(`${API}/api/auth/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -51,7 +52,7 @@ async function login(event) {
   }
 
   try {
-    const res = await fetch("http://192.168.10.89:3000/api/auth/login", {
+    const res = await fetch(`${API}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
