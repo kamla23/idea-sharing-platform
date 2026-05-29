@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const isLiked = localLikedIdeas.has(item._id);
             
-            // 🌟 FIXED: Object destructuring support agar author object pass ho raha ho
+       
             const displayAuthor = item.author?.username || item.author || 'Unknown';
 
             card.innerHTML = `
@@ -183,27 +183,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function actions() {
         document.querySelectorAll(".like-btn").forEach(b => {
-            b.onclick = async function() {
-                const id = this.getAttribute("data-id");
-                
-                if (localLikedIdeas.has(id)) {
-                    alert("⚠️ You have already liked this idea once!");
-                    return; 
-                }
+    b.onclick = async function() {
+        const id = this.getAttribute("data-id");
+        const icon = this.querySelector("i");
+        const countSpan = this.querySelector(".like-count");
+        
+   
+        let currentLikes = parseInt(countSpan.innerText);
+        if (isNaN(currentLikes)) currentLikes = 0;
 
-                localLikedIdeas.add(id);
-                const icon = this.querySelector("i");
-                const countSpan = this.querySelector(".like-count");
-                
-                icon.className = "fa-solid fa-heart"; 
-                icon.style.color = "#dc2626";
-                countSpan.innerText = parseInt(countSpan.innerText) + 1; 
+        let action = "";
 
-                try {
-                    await fetch(`${URL}/ideas/${id}/like`, { method: "POST", credentials: "include" });
-                } catch (err) { console.error(err); }
-            };
-        });
+        if (localLikedIdeas.has(id)) {
+            localLikedIdeas.delete(id); 
+            icon.className = "fa-regular fa-heart"; 
+            icon.style.color = "#64748b"; 
+            currentLikes = Math.max(0, currentLikes - 1);
+            action = "unlike";
+        } 
+
+        else {
+            localLikedIdeas.add(id); 
+            icon.className = "fa-solid fa-heart"; 
+            icon.style.color = "#dc2626"; 
+            currentLikes = currentLikes + 1; 
+            action = "like";
+        }
+
+     
+        countSpan.innerText = currentLikes;
+
+      
+        try {
+            const endpoint = action === "unlike" ? `${URL}/ideas/${id}/unlike` : `${URL}/ideas/${id}/like`;
+            
+            await fetch(endpoint, { method: "POST", credentials: "include" });
+        } catch (err) { 
+            console.error("Backend sync failed for like/unlike:", err); 
+        }
+    };
+});
 
         document.querySelectorAll(".cmt-btn").forEach(b => {
             b.onclick = async function() {
