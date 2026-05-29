@@ -182,44 +182,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function actions() {
-        document.querySelectorAll(".like-btn").forEach(b => {
+ document.querySelectorAll(".like-btn").forEach(b => {
     b.onclick = async function() {
         const id = this.getAttribute("data-id");
         const icon = this.querySelector("i");
         const countSpan = this.querySelector(".like-count");
         
-   
+
+        if (!user || user === "Reena") {
+            alert("Please Login first to like or interact with ideas!");
+            window.location.href = "login.html";
+            return;
+        }
+
         let currentLikes = parseInt(countSpan.innerText);
         if (isNaN(currentLikes)) currentLikes = 0;
 
-        let action = "";
-
+      
         if (localLikedIdeas.has(id)) {
-            localLikedIdeas.delete(id); 
-            icon.className = "fa-regular fa-heart"; 
-            icon.style.color = "#64748b"; 
+            localLikedIdeas.delete(id);
+            icon.className = "fa-regular fa-heart";
+            icon.style.color = "#64748b";
             currentLikes = Math.max(0, currentLikes - 1);
-            action = "unlike";
-        } 
-
-        else {
-            localLikedIdeas.add(id); 
-            icon.className = "fa-solid fa-heart"; 
-            icon.style.color = "#dc2626"; 
-            currentLikes = currentLikes + 1; 
-            action = "like";
+        } else {
+            localLikedIdeas.add(id);
+            icon.className = "fa-solid fa-heart";
+            icon.style.color = "#dc2626";
+            currentLikes = currentLikes + 1;
         }
 
-     
+ 
         countSpan.innerText = currentLikes;
 
-      
         try {
-            const endpoint = action === "unlike" ? `${URL}/ideas/${id}/unlike` : `${URL}/ideas/${id}/like`;
-            
-            await fetch(endpoint, { method: "POST", credentials: "include" });
+            await fetch(`${URL}/ideas/${id}/like`, { 
+                method: "POST", 
+                credentials: "include" 
+            });
         } catch (err) { 
-            console.error("Backend sync failed for like/unlike:", err); 
+            console.error("Backend sync failed:", err); 
         }
     };
 });
