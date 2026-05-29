@@ -10,7 +10,6 @@ import {
   validateLogin
 } from "../validations/auth.validation.js";
 
-// 1. SIGNUP CONTROLLER (No Changes)
 export const signup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -50,7 +49,7 @@ export const signup = async (req, res) => {
   }
 };
 
-// 2. LOGIN CONTROLLER (Updated to set AccessToken Cookie)
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -75,20 +74,19 @@ export const login = async (req, res) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    // 🌟 ACCESS TOKEN COOKIE (Frontend se LocalStorage hatane ke liye)
+   
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: false, // Hackathon me localhost/IP use hota hai isliye false rakhein
+      secure: false, 
       sameSite: "strict",
-      maxAge: 15 * 60 * 1000, // 15 Minutes expiry
+      maxAge: 15 * 60 * 1000, 
     });
 
-    // REFRESH TOKEN COOKIE
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 Days expiry
+      maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
 
     res.status(200).json({
@@ -104,10 +102,10 @@ export const login = async (req, res) => {
   }
 };
 
-// 🌟 3. NEW GET ME CONTROLLER (Extra API to find who is logged in)
+
 export const getMe = async (req, res) => {
   try {
-    // req.user ka data aapke protect/verifyToken middleware se aayega
+   
     const user = await User.findById(req.user.id).select("-passwordHash");
     
     if (!user) {

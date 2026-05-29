@@ -15,15 +15,16 @@ console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
 const app = express();
 
-app.use(express.json());
-app.use(cookieParser());
 
 app.use(cors({
-  origin: ["http://192.168.10.89:5500", "https://idea-sharing-platform-backend.onrender.com"],
+  origin: [ "https://idea-sharing-platform.onrender.com","http://192.168.10.89:5500"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
+
+app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/ideas", ideaRoutes);
