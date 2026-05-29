@@ -1,0 +1,124 @@
+import User from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/generateToken.js";
+
+import {
+  validateSignup,
+  validateLogin
+} from "../validations/auth.validation.js";
+
+// 1. SIGNUP CONTROLLER (No Changes)
+export const signup = async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const error = validateSignup(username, email, password);
+
+    if (error) {
+      return res.status(400).json({ message: error });
+    }
+
+    const existingUser = await User.findOne({
+      $or: [{ email }, { username }],
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+   
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
+    
+    const user = await User.create({
+      username,
+      email,
+      passwordHash,
+    });
+
+    res.status(201).json({
+      message: "User signed up successfully",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// 2. LOGIN CONTROLLER (Updated to set AccessToken Cookie)
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const error = validateLogin(email, password);
+
+    if (error) {
+      return res.status(400).json({ message: error });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+   
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+   
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    // 🌟 ACCESS TOKEN COOKIE (Frontend se LocalStorage hatane ke liye)
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: false, // Hackathon me localhost/IP use hota hai isliye false rakhein
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000, // 15 Minutes expiry
+    });
+
+    // REFRESH TOKEN COOKIE
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 Days expiry
+    });
+
+    res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// 🌟 3. NEW GET ME CONTROLLER (Extra API to find who is logged in)
+export const getMe = async (req, res) => {
+  try {
+    // req.user ka data aapke protect/verifyToken middleware se aayega
+    const user = await User.findById(req.user.id).select("-passwordHash");
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    res.status(200).json({
+      username: user.username,
+      email: user.email
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

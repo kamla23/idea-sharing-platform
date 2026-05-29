@@ -1,0 +1,180 @@
+/* ==========================================================
+   1. CORE CONTAINER LAYOUT (Footer ko bottom par chipkane ke liye)
+   ========================================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* Pure screen ki height control karega */
+    font-family: sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+
+body {
+    display: flex;
+    flex-direction: column; /* Content ko upar se neeche set karega */
+}
+
+.page-container {
+    flex: 1 0 auto; /* Khali jagah ko automatic gher lega aur footer ko niche dhakelega */
+}
+
+#footer {
+    flex-shrink: 0; /* Footer ko bottom par fix rakhega */
+}
+
+.green { color: #059669; }
+
+/* ==========================================================
+   2. EXPLORE DASHBOARD HEADER
+   ========================================================== */
+.explore-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.explore-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 20px;
+}
+
+.explore-header h2 { margin: 0 0 5px 0; font-size: 28px; text-align: left; }
+.explore-header p { margin: 0; color: #64748b; font-size: 15px; text-align: left; }
+
+.header-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.filter-dropdown {
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+}
+
+.btn-share {
+    background: #059669;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    transition: 0.2s;
+}
+.btn-share:hover { background: #047857; }
+
+/* ==========================================================
+   3. GRID AND CARDS CONFIGURATION
+   ========================================================== */
+.ideas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 25px;
+}
+
+.idea-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border-top: 5px solid #cbd5e1; 
+    display: flex;
+    flex-direction: column;
+    text-align: left; /* Card ke andar ka text left align rahega */
+}
+
+/* Categories Dynamic Top Borders */
+.border-Technology { border-top-color: #2563eb; } 
+.border-Science { border-top-color: #7c3aed; }    
+.border-Art { border-top-color: #ea580c; }        
+.border-Business { border-top-color: #db2777; }   
+.border-Other { border-top-color: #64748b; }      
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Categories Badges */
+.tag {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.tag-Technology { background: #eff6ff; color: #2563eb; }
+.tag-Science { background: #f5f3ff; color: #7c3aed; }
+.tag-Art { background: #fff7ed; color: #ea580c; }
+.tag-Business { background: #fdf2f8; color: #db2777; }
+.tag-Other { background: #f1f5f9; color: #64748b; }
+
+/* Edit / Delete Buttons */
+.card-actions { display: flex; gap: 8px; }
+.btn-icon {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    color: #94a3b8;
+    transition: 0.2s;
+}
+.btn-icon.edit:hover { color: #2563eb; }
+.btn-icon.delete:hover { color: #dc2626; }
+
+/* Typography inside Cards */
+.idea-card h3 { margin: 0 0 10px 0; font-size: 20px; color: #0f172a; }
+.idea-desc {
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    flex-grow: 1; 
+}
+
+.card-meta { font-size: 13px; color: #64748b; margin-bottom: 15px; }
+
+/* Stats Row */
+.card-stats {
+    display: flex;
+    gap: 20px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 12px;
+    color: #64748b;
+    font-size: 14px;
+}
+.card-stats i { margin-right: 4px; font-size: 15px; }
+.heart-icon:hover { color: #dc2626; cursor: pointer; }
+
+/* Comments Preview Box */
+.comments-preview {
+    background: #f8fafc;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #475569;
+}
+.comment-item {
+    margin-bottom: 6px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+.comment-item:last-child { margin-bottom: 0; }
+.comment-item i { color: #94a3b8; }

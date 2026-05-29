@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share New Idea - MindMeld</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="idea-form.css">
+    <link rel="stylesheet" href="navbar.css">
+</head>
+<body>
+
+    <div id="navbar"></div>
+
+    <main class="form-container">
+        <div class="form-box">
+            <h2>Pitch Your Innovative <span class="green">Idea</span></h2>
+            <p>Fill out the details below. It will be published under your account.</p>
+
+            <form id="share-idea-form">
+                <div class="form-group">
+                    <label for="idea-title">Idea Title</label>
+                    <input type="text" id="idea-title" placeholder="e.g., Smart Water Management System" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="idea-category">Category</label>
+                    <select id="idea-category" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Science">Science</option>
+                        <option value="Art">Art</option>
+                        <option value="Business">Business</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="idea-tags">Tags <span class="optional">(Comma separated)</span></label>
+                    <input type="text" id="idea-tags" placeholder="e.g., #ai, #iot, #environment">
+                </div>
+
+                <div class="form-group">
+                    <label for="idea-desc">Description / Concept</label>
+                    <textarea id="idea-desc" rows="6" placeholder="Explain your idea, the problem it solves..." required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit"><i class="fa-solid fa-paper-plane"></i> Publish Idea</button>
+                    <a href="explore.html" class="btn-cancel">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="navbar.js"></script>
+    <script src="footer.js"></script>
+    <script src="idea-form.js"></script>
+</body>
+</html>

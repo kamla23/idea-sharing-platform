@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Ideas - MindMeld</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="explore.css">
+    <link rel="stylesheet" href="navbar.css">
+</head>
+<body>
+<div class="page-container">
+    <div id="navbar"></div>
+
+    <main class="explore-container">
+        <header class="explore-header">
+            <div class="header-left">
+                <h2>Explore Creative <span class="green">Ideas</span></h2>
+                <p>Discover innovative solutions pitched by creators worldwide.</p>
+            </div>
+            
+            <div class="header-actions">
+                <select id="category-filter" class="filter-dropdown">
+                    <option value="all">All Categories</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Science">Science</option>
+                    <option value="Art">Art</option>
+                    <option value="Business">Business</option>
+                    <option value="Other">Other</option>
+                </select>
+                <a href="idea-form.html" class="btn-share"><i class="fa-solid fa-plus"></i> Share Idea</a>
+            </div>
+        </header>
+
+        <section class="ideas-grid" id="ideas-container"></section>
+    </main>
+</div>
+    <div id="footer"></div>
+
+    <script src="navbar.js"></script>
+    <script src="footer.js"></script>
+    <script src="explore.js"></script>
+</body>
+</html>
