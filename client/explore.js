@@ -2,15 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const box = document.getElementById("ideas-container");
     const filter = document.getElementById("category-filter");
     
-
     const URL = "https://idea-sharing-platform-backend.onrender.com/api";
     
-   
     let user = "Reena"; 
     let currentEditId = null;
     let localLikedIdeas = new Set(); 
 
-  
     const dummyIdeas = [
         {
             _id: "1",
@@ -81,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     document.body.appendChild(modal);
 
-
     async function checkAuth() {
         try {
             const res = await fetch(`${URL}/auth/me`, { method: "GET", credentials: "include" });
@@ -90,13 +86,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (data && data.username) {
                     user = data.username; 
                 }
+            } else {
+                console.log("Not logged in. Using Guest/Default session profile.");
             }
         } catch (err) { 
-            console.error("Auth bypass activation."); 
+            console.log("Auth check skipped, offline/bypass mode active."); 
         }
         getIdeas(); 
     }
-
 
     async function getIdeas() {
         try {
@@ -136,6 +133,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const isLiked = localLikedIdeas.has(item._id);
+            
+            // 🌟 FIXED: Object destructuring support agar author object pass ho raha ho
+            const displayAuthor = item.author?.username || item.author || 'Unknown';
 
             card.innerHTML = `
                 <div class="view-block">
@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <h3>${item.title}</h3>
                     <p class="idea-desc">${item.description}</p>
                     <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;">${tags}</div>
-                    <div class="card-meta">By <strong>${item.author || 'Unknown'}</strong></div>
+                    <div class="card-meta">By <strong>${displayAuthor}</strong></div>
                     
                     <div class="card-stats" style="user-select:none; margin-top:12px;">
                         <span class="like-btn" data-id="${item._id}" style="cursor:pointer; margin-right:15px;">
@@ -180,7 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         actions();
     }
-
 
     function actions() {
         document.querySelectorAll(".like-btn").forEach(b => {
