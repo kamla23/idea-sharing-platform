@@ -1,104 +1,204 @@
-/* ==========================================================
-   1. FOOTER FIX & CORE STYLING (Flexbox Configuration)
-   ========================================================== */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%; /* Pure screen ki height control karne ke liye */
-    font-family: sans-serif;
-    background-color: #f8fafc;
-    color: #1e293b;
+
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 body {
-    display: flex;
-    flex-direction: column; /* Content ko upar se neeche set karega */
+  background: #fdfbfc;
+  color: #1e1112;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .page-container {
-    flex: 1 0 auto; /* Yeh khali bachi jagah ko gher lega aur footer ko neeche dhakelega */
-    text-align: center;
+  flex: 1 0 auto;
+
+  background: radial-gradient(circle at top right, #ffecea 0%, transparent 45%),
+    radial-gradient(circle at bottom left, #f8fafc 0%, transparent 50%), #fdfbfc;
 }
 
-#footer {
-    flex-shrink: 0; /* Footer ko apni jagah se hilne nahi dega */
+.green {
+  color: #ff6347 !important;
+  font-weight: 700;
 }
 
-.green { color: #059669; }
-
-/* ==========================================================
-   2. HERO SECTION
-   ========================================================== */
 .hero {
-    padding: 60px 20px;
-    background: linear-gradient(to bottom, #f0fdf4, #ffffff);
+  padding: 160px 20px 80px 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-box {
+  max-width: 800px;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .hero-box h1 {
-    font-size: 40px;
-    margin-bottom: 15px;
+  font-size: 52px;
+  font-weight: 800;
+  color: #1e1112;
+  letter-spacing: -1.5px;
+  line-height: 1.2;
+  margin-bottom: 20px;
 }
 
 .hero-box p {
-    font-size: 16px;
-    color: #475569;
-    margin-bottom: 25px;
+  font-size: 18px;
+  color: #5c4d4f;
+  max-width: 600px;
+  margin: 0 auto 36px auto;
+  line-height: 1.6;
 }
 
-/* Buttons */
 .btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn {
-    padding: 10px 22px;
-    border-radius: 6px;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 15px;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
 }
 
-.btn-main { background: #059669; color: white; }
-.btn-sub { border: 2px solid #059669; color: #059669; }
+.btn-main {
+  background: #ff6347;
+  box-shadow: 0 4px 14px rgba(255, 99, 71, 0.25);
+}
 
-/* ==========================================================
-   3. CARDS SECTION (FEATURES)
-   ========================================================== */
+.btn-main:hover {
+  background: #e04e33;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(224, 78, 51, 0.35);
+}
+
+.btn-sub {
+  background: white;
+  color: #5c4d4f;
+  border: 1px solid #f1e6e6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.01);
+}
+
+.btn-sub:hover {
+  background: #fff8f7;
+  color: #1e1112;
+  border-color: #ffcdca;
+  transform: translateY(-2px);
+}
+
 .features {
-    padding: 50px 20px;
-    max-width: 1100px;
-    margin: 0 auto;
+  padding: 80px 40px 120px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.features h2 { margin-bottom: 40px; }
+.features h2 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #1e1112;
+  letter-spacing: -0.75px;
+  margin-bottom: 50px;
+}
 
 .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  margin-top: 20px;
 }
 
 .card {
-    background: white;
-    padding: 30px 20px;
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
+  background: white;
+  border: 1px solid #f1e6e6;
+  padding: 40px 30px;
+  border-radius: 16px;
+  text-align: left;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01);
 }
 
-/* Icons Styles */
-.icon {
-    font-size: 24px;
-    padding: 15px;
-    border-radius: 50px;
-    margin-bottom: 15px;
-    display: inline-block; /* Icon spacing fix karne ke liye */
+.card:hover {
+  transform: translateY(-6px);
+  border-color: #ff6347;
+  box-shadow: 0 20px 25px -5px rgba(255, 99, 71, 0.06),
+    0 10px 10px -5px rgba(0, 0, 0, 0.01);
 }
 
-.c1 { background: #eff6ff; color: #2563eb; }
-.c2 { background: #fdf2f8; color: #db2777; }
-.c3 { background: #f0fdf4; color: #16a34a; }
+.card .icon {
+  font-size: 22px;
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 
-.card h3 { margin: 10px 0; font-size: 18px; }
-.card p { color: #64748b; font-size: 14px; line-height: 1.5; }
+.card .icon.c1 {
+  background: #ffecea;
+  color: #ff6347;
+}
+.card .icon.c2 {
+  background: #fff7ed;
+  color: #ea580c;
+}
+.card .icon.c3 {
+  background: #f8fafc;
+  color: #475569;
+} 
+
+.card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e1112;
+  margin-bottom: 12px;
+}
+
+.card p {
+  font-size: 14px;
+  color: #5c4d4f;
+  line-height: 1.6;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-box h1 {
+    font-size: 38px;
+  }
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+  .features {
+    padding: 40px 20px;
+  }
+}

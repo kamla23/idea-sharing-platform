@@ -1,37 +1,31 @@
-<!DOCTYPE html>
 
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Signup</title>
-  <link rel="stylesheet" href="signup.css">
-  <link rel="stylesheet" href="navbar.css">
-</head>
-<body>
-<div class="page-container">
-<div id="navbar"></div>
 
-<div class="page-wrapper">
-
-  <div class="form-card">
-    <h2>Create Account</h2>
-
-    <input type="text" id="username" placeholder="Username">
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-
-    <button onclick="signup()">Sign Up</button>
-
-    <p>Already have an account? <a href="login.html">Login</a></p>
-  </div>
-
+<div class="modal-card">
+  <button id="close-modal-btn" class="close-btn">&times;</button>
+  
+  <h2>Create Account</h2>
+  <p class="subtitle">Join MindMeld to pitch and collaborate on innovative ideas</p>
+  
+  <form id="popupSignupForm">
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="signup-username" class="form-control" placeholder="Choose a username" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="signup-email" class="form-control" placeholder="Enter your email.." required>
+    </div>
+    
+   <div class="form-group" style="position: relative; margin-bottom: 15px;">
+    <label for="signup-password" style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">Password</label>
+    <input type="password" id="signup-password" placeholder="Create a password" required style="width: 100%; padding: 10px; padding-right: 40px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+    <i class="fa-solid fa-eye toggle-password" data-target="signup-password" style="position: absolute; right: 12px; top: 38px; cursor: pointer; color: #64748b;"></i>
+</div>
+    
+    <button type="submit" class="btn-primary">Sign Up</button>
+  </form>
+  
+<p class="switch-auth">Already have an account? <a href="#" id="go-to-login">Login</a></p>
 </div>
 </div>
-<div id="footer"></div>
-
-<script src="auth.js"></script>
-<script src="navbar.js"></script>
-<script src="footer.js"></script>
-
-</body>
-</html>

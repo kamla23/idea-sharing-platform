@@ -1,37 +1,47 @@
-/* ==========================================================
-   1. CORE CONTAINER LAYOUT (Footer ko bottom par chipkane ke liye)
-   ========================================================== */
+*{   padding:0;
+    margin:0;
+}
 html, body {
     margin: 0;
     padding: 0;
-    height: 100%; /* Pure screen ki height control karega */
-    font-family: sans-serif;
-    background-color: #f8fafc;
-    color: #1e293b;
+    height: 100%; 
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #fdfbfc; 
+    color: #1e1112;
 }
 
 body {
     display: flex;
-    flex-direction: column; /* Content ko upar se neeche set karega */
+    flex-direction: column; 
+    min-height: 100vh;
+    padding-top: 75px;
 }
 
 .page-container {
-    flex: 1 0 auto; /* Khali jagah ko automatic gher lega aur footer ko niche dhakelega */
+    flex: 1 0 auto; 
+    padding-top: 100px; 
+    box-sizing: border-box;
+    background: 
+        radial-gradient(circle at top right, #ffecea 0%, transparent 35%),
+        #fdfbfc;
 }
 
 #footer {
-    flex-shrink: 0; /* Footer ko bottom par fix rakhega */
+    margin-top: auto; 
+    flex-shrink: 0;
+    width: 100%;
 }
 
-.green { color: #059669; }
+.green { 
+    color: #ff6347 !important; 
+    font-weight: 800;
+}
 
-/* ==========================================================
-   2. EXPLORE DASHBOARD HEADER
-   ========================================================== */
 .explore-container {
     max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
+    margin: 20px auto 60px auto;
+    padding: 0 30px;
+    box-sizing: border-box;
 }
 
 .explore-header {
@@ -39,142 +49,201 @@ body {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 24px;
     margin-bottom: 40px;
-    border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 20px;
+    border-bottom: 1px solid #f1e6e6;
+    padding-bottom: 24px;
 }
 
-.explore-header h2 { margin: 0 0 5px 0; font-size: 28px; text-align: left; }
-.explore-header p { margin: 0; color: #64748b; font-size: 15px; text-align: left; }
+.explore-header h2 { 
+    margin: 0 0 8px 0; 
+    font-size: 34px; 
+    font-weight: 800;
+    text-align: left; 
+    letter-spacing: -0.8px;
+}
+
+.explore-header p { 
+    margin: 0; 
+    color: #5c4d4f; 
+    font-size: 15px; 
+    text-align: left; 
+}
 
 .header-actions {
     display: flex;
-    gap: 15px;
+    gap: 16px;
     align-items: center;
 }
 
 .filter-dropdown {
-    padding: 10px 15px;
-    border-radius: 6px;
-    border: 1px solid #cbd5e1;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: 1px solid #e5d5d5;
     background: white;
     font-size: 14px;
+    color: #1e1112;
     outline: none;
     cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.filter-dropdown:focus {
+    border-color: #ff6347;
+    box-shadow: 0 0 0 3px rgba(255, 99, 71, 0.15);
 }
 
 .btn-share {
-    background: #059669;
+    background: #ff6347;
     color: white;
-    padding: 10px 20px;
-    border-radius: 6px;
+    padding: 12px 24px;
+    border-radius: 10px;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 14px;
-    transition: 0.2s;
+    box-shadow: 0 4px 14px rgba(255, 99, 71, 0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.btn-share:hover { background: #047857; }
 
-/* ==========================================================
-   3. GRID AND CARDS CONFIGURATION
-   ========================================================== */
+.btn-share:hover { 
+    background: #e04e33; 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(224, 78, 51, 0.35);
+}
+
 .ideas-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 25px;
+    gap: 32px; 
 }
 
 .idea-card {
     background: white;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    border-top: 5px solid #cbd5e1; 
+    border-radius: 20px; 
+    padding: 30px;
+    box-shadow: 0 4px 24px rgba(30, 17, 18, 0.03);
+    border: 1px solid #f3eae9;
+    border-top: 6px solid #cbd5e1; 
     display: flex;
     flex-direction: column;
-    text-align: left; /* Card ke andar ka text left align rahega */
+    text-align: left; 
+    box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Categories Dynamic Top Borders */
-.border-Technology { border-top-color: #2563eb; } 
-.border-Science { border-top-color: #7c3aed; }    
-.border-Art { border-top-color: #ea580c; }        
-.border-Business { border-top-color: #db2777; }   
-.border-Other { border-top-color: #64748b; }      
+.idea-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 32px rgba(255, 99, 71, 0.06), 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+
+.border-Technology { border-top-color: #ff6347 !important; } 
+.border-Science { border-top-color: #ea580c !important; }    
+.border-Art { border-top-color: #db2777 !important; }        
+.border-Business { border-top-color: #0d9488 !important; }   
+.border-Other { border-top-color: #64748b !important; }      
 
 .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-/* Categories Badges */
 .tag {
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 800;
 }
-.tag-Technology { background: #eff6ff; color: #2563eb; }
-.tag-Science { background: #f5f3ff; color: #7c3aed; }
-.tag-Art { background: #fff7ed; color: #ea580c; }
-.tag-Business { background: #fdf2f8; color: #db2777; }
+.tag-Technology { background: #ffecea; color: #ff6347; }
+.tag-Science { background: #fff7ed; color: #ea580c; }
+.tag-Art { background: #fdf2f8; color: #db2777; }
+.tag-Business { background: #f0fdfa; color: #0d9488; }
 .tag-Other { background: #f1f5f9; color: #64748b; }
 
-/* Edit / Delete Buttons */
-.card-actions { display: flex; gap: 8px; }
+.card-actions { display: flex; gap: 10px; }
 .btn-icon {
     border: none;
     background: none;
     cursor: pointer;
     font-size: 16px;
-    padding: 4px;
-    color: #94a3b8;
-    transition: 0.2s;
+    padding: 6px;
+    color: #a4b3c6;
+    transition: color 0.2s ease;
 }
-.btn-icon.edit:hover { color: #2563eb; }
-.btn-icon.delete:hover { color: #dc2626; }
+.btn-icon.edit:hover { color: #ff6347; } 
+.btn-icon.delete:hover { color: #ef4444; }
 
-/* Typography inside Cards */
-.idea-card h3 { margin: 0 0 10px 0; font-size: 20px; color: #0f172a; }
+.idea-card h3 { 
+    margin: 0 0 12px 0; 
+    font-size: 22px; 
+    font-weight: 800;
+    color: #1e1112; 
+    line-spacing: -0.3px;
+}
+
 .idea-desc {
     font-size: 14px;
-    color: #475569;
-    line-height: 1.5;
-    margin-bottom: 15px;
+    color: #5c4d4f;
+    line-height: 1.6;
+    margin-bottom: 20px;
     flex-grow: 1; 
 }
 
-.card-meta { font-size: 13px; color: #64748b; margin-bottom: 15px; }
+.card-meta { 
+    font-size: 13px; 
+    color: #8c7a7c; 
+    margin-bottom: 20px; 
+    font-weight: 500;
+}
 
-/* Stats Row */
+
 .card-stats {
     display: flex;
-    gap: 20px;
-    border-top: 1px solid #f1f5f9;
-    padding-top: 12px;
-    color: #64748b;
+    gap: 24px;
+    border-top: 1px solid #fdf4f3; 
+    padding-top: 16px;
+    color: #8c7a7c;
     font-size: 14px;
+    font-weight: 600;
 }
-.card-stats i { margin-right: 4px; font-size: 15px; }
-.heart-icon:hover { color: #dc2626; cursor: pointer; }
+.card-stats i { margin-right: 6px; font-size: 16px; }
 
-/* Comments Preview Box */
-.comments-preview {
-    background: #f8fafc;
-    border-radius: 6px;
-    padding: 10px;
-    margin-top: 12px;
-    font-size: 13px;
-    color: #475569;
+
+.heart-icon:hover { 
+    color: #ef4444; 
+    cursor: pointer; 
+    transform: scale(1.15);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+.comments-preview {
+    background: #fff8f7; 
+    border-left: 4px solid #ff6347; 
+    border-radius: 6px;
+    padding: 14px;
+    margin-top: 18px;
+    font-size: 13px;
+    color: #5c4d4f;
+    box-sizing: border-box;
+}
+
 .comment-item {
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     display: flex;
-    gap: 6px;
-    align-items: center;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.4;
 }
 .comment-item:last-child { margin-bottom: 0; }
-.comment-item i { color: #94a3b8; }
+.comment-item i { 
+    color: rgba(255, 99, 71, 0.6); 
+    margin-top: 2px;
+} 
+ 

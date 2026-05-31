@@ -1,22 +1,101 @@
-.footer {
-  background: #0f172a;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  margin-top: 40px;
+
+.custom-footer {
+    background-color: #111827; 
+    color: #9ca3af; 
+    font-family: sans-serif; 
+    padding: 50px 50px 20px 50px; 
+    margin-top: 50px; 
+    border-top: 2px solid rgba(255, 99, 71, 0.2); 
+    box-sizing: border-box;
 }
 
-.footer-links {
-  margin-top: 10px;
+.footer-container {
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    gap: 40px; 
+    margin-bottom: 40px; 
+    max-width: 1200px; 
+    margin-left: auto; 
+    margin-right: auto;
 }
 
-.footer-links a {
-  color: #22c55e;
-  margin: 0 10px;
-  text-decoration: none;
-  font-size: 14px;
+.footer-col-brand {
+    flex: 1; 
+    min-width: 250px;
 }
 
-.footer-links a:hover {
-  text-decoration: underline;
+.footer-col-links {
+    flex: 1; 
+    min-width: 150px;
+}
+
+.footer-logo {
+    font-size: 24px; 
+    font-weight: 900; 
+    margin: 0 0 15px 0; 
+    letter-spacing: -0.5px;
+}
+
+.footer-logo .text-white { color: #ffffff; }
+.footer-logo .text-orange { color: #ff6347; }
+
+.footer-desc {
+    font-size: 14px; 
+    line-height: 1.6; 
+    color: #9ca3af; 
+    margin-bottom: 20px;
+}
+
+.footer-heading {
+    color: #ffffff; 
+    font-size: 16px; 
+    margin: 0 0 15px 0; 
+    font-weight: 700;
+}
+
+.footer-socials {
+    display: flex; 
+    gap: 15px; 
+    font-size: 18px;
+}
+
+.footer-list {
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+    font-size: 14px; 
+    line-height: 2.2;
+}
+
+.footer-link {
+    color: #9ca3af; 
+    text-decoration: none; 
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover,
+.footer-socials a:hover {
+    color: #ff6347 !important;
+}
+
+.footer-bottom {
+    border-top: 1px solid #1f2937; 
+    padding-top: 20px; 
+    text-align: center; 
+    font-size: 13px; 
+    color: #6b7280;
+}
+
+.footer-bottom .heart-icon {
+    color: #ef4444;
+}
+
+@media (max-width: 768px) {
+    .custom-footer {
+        padding: 40px 20px 20px 20px;
+    }
+    .footer-container {
+        gap: 30px;
+    }
 }

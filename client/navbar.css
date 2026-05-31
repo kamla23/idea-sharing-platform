@@ -1,48 +1,155 @@
-/* Navbar ka main layout */
+
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background-color: #1a1a2e; /* Jo bhi aapka navbar background color ho */
-  color: white;
+  padding: 0 50px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border-bottom: 1px solid rgba(255, 99, 71, 0.2);
+  box-shadow: 0 4px 30px rgba(255, 99, 71, 0.03);
+  z-index: 999;
+  box-sizing: border-box;
 }
 
-/* Menu list jisme saare links hain */
+.logo {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  cursor: pointer;
+}
+.logo .mind {
+  color: #1e1112;
+  font-weight: 900;
+}
+.logo .meld {
+  color: #ff6347;
+  font-weight: 900;
+  position: relative;
+}
+
+.hamburger-menu {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #5c4d4f;
+}
+
 .menu {
   display: flex;
-  list-style: none;
   align-items: center;
-  gap: 20px; /* Saare menu items ke beech ka gap */
+  list-style: none;
+  gap: 32px;
   margin: 0;
   padding: 0;
 }
 
-/* Individual list item (li) ke liye */
-.menu li {
-  display: inline-flex;
-  align-items: center;
-}
-
-/* Links aur icons ka adjustment */
 .menu li a {
-  color: white;
   text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: #5c4d4f;
+  padding: 8px 4px;
   display: flex;
   align-items: center;
-  gap: 8px; /* Icon aur Text ke beech ka space */
-  font-size: 1rem;
-  transition: color 0.3s ease;
+  gap: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  box-sizing: border-box;
 }
 
-/* Hover effect */
 .menu li a:hover {
-  color: #2ecc71; /* MindMeld ka green accent color */
+  color: #ff6347;
 }
 
-/* User-name ka style jo login ke baad dikhega */
+.menu li a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #ff6347;
+  transition: width 0.3s ease;
+}
+.menu li a:hover::after {
+  width: 100%;
+}
+
+#login-link a {
+  background: rgba(255, 99, 71, 0.08);
+  color: #ff6347;
+  padding: 8px 22px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 99, 71, 0.15);
+  display: inline-block;
+  white-space: nowrap;
+}
+#login-link a:hover {
+  background: #ff6347;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(255, 99, 71, 0.2);
+}
+#login-link a::after {
+  display: none;
+}
+
 #user-name {
-  font-weight: bold;
-  color: #2ecc71;
-  font-size: 1rem;
+  color: #ff6347 !important;
+  font-weight: 700;
+  font-size: 15px;
+}
+#logout-link a {
+  color: #ef4444 !important;
+  font-weight: 600;
+}
+#logout-link a::after {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 20px;
+  }
+  .hamburger-menu {
+    display: block;
+  }
+
+  .menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 236, 234, 0.98);
+    backdrop-filter: blur(15px);
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 99, 71, 0.15);
+    gap: 20px;
+  }
+  .menu.active {
+    display: flex;
+  }
+  .menu li {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .menu li a {
+    font-size: 16px;
+    padding: 10px;
+    width: 80%;
+    justify-content: center;
+  }
+  #login-link a {
+    width: auto;
+  }
 }

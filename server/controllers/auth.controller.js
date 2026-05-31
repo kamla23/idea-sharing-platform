@@ -76,21 +76,22 @@ export const login = async (req, res) => {
 
    
     res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: false, 
-      sameSite: "strict",
-      maxAge: 15 * 60 * 1000, 
-    });
+  httpOnly: true,
+  secure: true,        
+  sameSite: "none",   
+  maxAge: 15 * 60 * 1000,
+});
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, 
-    });
+res.cookie("refreshToken", refreshToken, {
+  httpOnly: true,
+  secure: true,        
+  sameSite: "none",    
+  maxAge: 7 * 24 * 60 * 60 * 1000, 
+});
 
-    res.status(200).json({
+  res.status(200).json({
       message: "Login successful",
+      token: accessToken, 
       user: {
         id: user._id,
         username: user.username,
@@ -121,13 +122,13 @@ export const getMe = async (req, res) => {
   }
 };
 
-// 🔥 Naya logout function aapke controller ke format mein
+
 export const logout = async (req, res) => {
   try {
-    // 1. Dono cookies (accessToken aur refreshToken) ko clear karna hoga
+
     res.clearCookie("accessToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Deployed par automatic true ho jayega
+      secure: process.env.NODE_ENV === "production", 
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     });
 

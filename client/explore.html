@@ -1,44 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Explore Ideas - MindMeld</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="explore.css">
-    <link rel="stylesheet" href="navbar.css">
-</head>
-<body>
-<div class="page-container">
-    <div id="navbar"></div>
 
-    <main class="explore-container">
+    <script>
+      function checkPage() {
+        const user = localStorage.getItem("user_login_name");
+        if (!user || user === "undefined" || user === "null") {
+          alert("Please login first to access this page! ");
+          window.location.href = "home.html";
+        }
+      }
+      checkPage();
+    </script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="explore.css" />
+    <link rel="stylesheet" href="navbar.css" />
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .page-container {
+        width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-container">
+      <div id="navbar"></div>
+
+      <main class="explore-container">
         <header class="explore-header">
-            <div class="header-left">
-                <h2>Explore Creative <span class="green">Ideas</span></h2>
-                <p>Discover innovative solutions pitched by creators worldwide.</p>
-            </div>
-            
-            <div class="header-actions">
-                <select id="category-filter" class="filter-dropdown">
-                    <option value="all">All Categories</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Science">Science</option>
-                    <option value="Art">Art</option>
-                    <option value="Business">Business</option>
-                    <option value="Other">Other</option>
-                </select>
-                <a href="idea-form.html" class="btn-share"><i class="fa-solid fa-plus"></i> Share Idea</a>
-            </div>
+          <div class="header-left">
+            <h2>Explore Creative <span class="green">Ideas</span></h2>
+            <p>Discover innovative solutions pitched by creators worldwide.</p>
+          </div>
+
+          <div class="header-actions">
+            <select id="category-filter" class="filter-dropdown">
+              <option value="all">All Categories</option>
+              <option value="Technology">Technology</option>
+              <option value="Science">Science</option>
+              <option value="Art">Art</option>
+              <option value="Business">Business</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <button
+            id="share-idea-btn"
+            class="btn-share"
+            style="
+              background: #ff6347;
+              color: white;
+              padding: 10px 20px;
+              border-radius: 6px;
+              border: none;
+              font-weight: bold;
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              cursor: pointer;
+            "
+          >
+            <i class="fa-solid fa-plus"></i> Share Idea
+          </button>
         </header>
 
         <section class="ideas-grid" id="ideas-container"></section>
-    </main>
-</div>
-    <div id="footer"></div>
+      </main>
+    </div>
 
+    <div
+      id="share-modal"
+      class="modal-overlay"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(3px);
+      "
+    >
+      <div
+        style="
+          background: white;
+          padding: 25px;
+          border-radius: 12px;
+          width: 90%;
+          max-width: 500px;
+          font-family: sans-serif;
+          position: relative;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        "
+      >
+        <span
+          id="close-share-btn"
+          style="
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 22px;
+            cursor: pointer;
+            color: #64748b;
+          "
+          >&times;</span
+        >
+
+        <h2 style="margin: 0 0 5px 0; font-size: 24px">
+          Pitch Your Innovative <span style="color: #ff6347">Idea</span>
+        </h2>
+        <p style="margin: 0 0 20px 0; color: #64748b; font-size: 14px">
+          Fill out the details below. It will be published under your account.
+        </p>
+
+        <form id="popup-idea-form">
+          <div style="margin-bottom: 15px">
+            <label
+              for="idea-title"
+              style="
+                font-weight: bold;
+                font-size: 13px;
+                display: block;
+                margin-bottom: 5px;
+              "
+              >Idea Title</label
+            >
+            <input
+              type="text"
+              id="idea-title"
+              placeholder="e.g., Smart Water Management System"
+              required
+              style="
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
+                box-sizing: border-box;
+              "
+            />
+          </div>
+
+          <div style="margin-bottom: 15px">
+            <label
+              for="idea-cat"
+              style="
+                font-weight: bold;
+                font-size: 13px;
+                display: block;
+                margin-bottom: 5px;
+              "
+              >Category</label
+            >
+            <select
+              id="idea-cat"
+              required
+              style="
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
+                box-sizing: border-box;
+                background: white;
+              "
+            >
+              <option value="" disabled selected>Select a category</option>
+              <option value="Technology">Technology</option>
+              <option value="Science">Science</option>
+              <option value="Art">Art</option>
+              <option value="Business">Business</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 15px">
+            <label
+              for="idea-tags"
+              style="
+                font-weight: bold;
+                font-size: 13px;
+                display: block;
+                margin-bottom: 5px;
+              "
+              >Tags
+              <span style="color: #64748b; font-weight: normal; font-size: 11px"
+                >(Comma separated)</span
+              ></label
+            >
+            <input
+              type="text"
+              id="idea-tags"
+              placeholder="e.g., #ai, #iot, #environment"
+              style="
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
+                box-sizing: border-box;
+              "
+            />
+          </div>
+
+          <div style="margin-bottom: 20px">
+            <label
+              for="idea-desc"
+              style="
+                font-weight: bold;
+                font-size: 13px;
+                display: block;
+                margin-bottom: 5px;
+              "
+              >Description / Concept</label
+            >
+            <textarea
+              id="idea-desc"
+              rows="5"
+              placeholder="Explain your idea, the problem it solves..."
+              required
+              style="
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
+                resize: none;
+                box-sizing: border-box;
+              "
+            ></textarea>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              gap: 12px;
+              justify-content: end;
+              align-items: center;
+            "
+          >
+            <button
+              type="button"
+              id="share-cancel"
+              style="
+                background: #e2e8f0;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: bold;
+                color: #334155;
+              "
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              style="
+                background: #ff6347;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: bold;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+              "
+            >
+              <i class="fa-solid fa-paper-plane"></i> Publish Idea
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="auth-modal" class="modal-overlay" style="display: none"></div>
+    <div id="footer"></div>
     <script src="navbar.js"></script>
+    <script src="signup.js"></script>
+    <script src="login.js"></script>
+
     <script src="footer.js"></script>
     <script src="explore.js"></script>
-</body>
+  </body>
 </html>

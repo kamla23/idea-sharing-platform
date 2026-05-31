@@ -1,3 +1,4 @@
+<!-- 
 <nav class="navbar">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -6,13 +7,13 @@
   </h2>
 
   <ul class="menu">
-    <li><a href="home.html">Home</a></li>
+    <li><a href="home.html" class="active">Home</a></li>
     <li><a href="explore.html">Explore</a></li>
 
     <li id="user-name" style="display: none;"></li>
 
     <li id="login-link">
-      <a href="login.html" title="Login">
+      <a href="#" id="nav-login-btn" title="Login">
         <i class="fa-solid fa-user-circle"></i> Login
       </a>
     </li>
@@ -23,4 +24,25 @@
       </a>
     </li>
   </ul>
-</nav>
+</nav> -->
+
+<div class="navbar">
+    <div class="logo">
+        <a href="home.html" style="text-decoration: none;">
+            <span class="mind">Mind</span><span class="meld">Meld</span><span class="meld"></span>
+        </a>
+    </div>
+
+    <div class="hamburger-menu" id="hamburger-icon">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+
+    <ul class="menu" id="nav-links-container">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="explore.html">Explore</a></li>
+        
+        <li id="login-link"><a href="#" id="nav-login-btn">Login</a></li>
+        <li id="user-name" style="display: none;"></li>
+        <li id="logout-link" style="display: none;"><a href="#" id="logout-btn">Logout</a></li>
+    </ul>
+</div>

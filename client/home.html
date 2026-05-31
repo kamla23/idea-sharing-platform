@@ -4,52 +4,75 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home - MindMeld</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
     <link rel="stylesheet" href="home.css" />
     <link rel="stylesheet" href="navbar.css" />
+    <link rel="stylesheet" href="signup.css" />
+    <link rel="stylesheet" href="footer.css" />
   </head>
   <body>
-   <div class="page-container">
-    <div id="navbar"></div>
+    <div class="page-container">
+      <div id="navbar"></div>
 
-    <section class="hero">
-      <div class="hero-box">
-        <h1>Turn Your Ideas Into <span class="green">Reality</span></h1>
-        <p>Share, explore and collaborate on innovative ideas with others.</p>
-        <div class="btn-group">
-          <a href="signup.html" class="btn btn-main">Get Started</a>
-          <a href="explore.html" class="btn btn-sub">Explore Ideas</a>
-        </div>
-      </div>
-    </section>
+      <section class="hero">
+        <div class="hero-box">
+          <h1>
+            Where Tech Thinkers <span class="green">Connect & Build</span>
+          </h1>
+          <p>
+            The ultimate launchpad to pitch innovative concepts, gather expert
+            reviews, and form your dream team.
+          </p>
 
-    <section class="features">
-      <h2>What is <span class="green">MindMeld</span>?</h2>
-      
-      <div class="card-grid">
-        <div class="card">
-          <i class="fa-solid fa-lightbulb icon c1"></i>
-          <h3>Share Concepts</h3>
-          <p>Publish your draft projects and let the community check them.</p>
+          <div class="btn-group">
+            <button
+              class="btn btn-main"
+              id="get-started-btn"
+              style="cursor: pointer"
+            >
+              Get Started
+            </button>
+            <a href="explore.html" class="btn btn-sub">Explore Ideas</a>
+          </div>
         </div>
+      </section>
 
-        <div class="card">
-          <i class="fa-solid fa-rocket icon c2"></i>
-          <h3>Get Upvotes</h3>
-          <p>Gain traction by getting peer reviews from developers.</p>
-        </div>
+      <section class="features">
+        <h2>What is <span class="green">MindMeld</span>?</h2>
 
-        <div class="card">
-          <i class="fa-solid fa-users icon c3"></i>
-          <h3>Collaborate</h3>
-          <p>Connect with teams and managers to build projects together.</p>
+        <div class="card-grid">
+          <div class="card">
+            <i class="fa-solid fa-lightbulb icon c1"></i>
+            <h3>Share Concepts</h3>
+            <p>Publish your draft projects and let the community check them.</p>
+          </div>
+
+          <div class="card">
+            <i class="fa-solid fa-rocket icon c2"></i>
+            <h3>Get Upvotes</h3>
+            <p>Gain traction by getting peer reviews from developers.</p>
+          </div>
+
+          <div class="card">
+            <i class="fa-solid fa-users icon c3"></i>
+            <h3>Collaborate</h3>
+            <p>Connect with teams and managers to build projects together.</p>
+          </div>
         </div>
-      </div>
-    </section>
-</div>
+      </section>
+    </div>
     <div id="footer"></div>
-    
-    <script src="footer.js"></script>
+
+    <div id="auth-modal" class="modal-overlay" style="display: none"></div>
     <script src="navbar.js"></script>
+    <script src="signup.js"></script>
+    <script src="login.js"></script>
+    <script src="footer.js"></script>
+    <script src="home.js"></script>
   </body>
 </html>
