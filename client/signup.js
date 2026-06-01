@@ -4,7 +4,6 @@ const SIGNUP_API_URL = "https://idea-sharing-platform-backend.onrender.com";
 async function signup(event, modal, loadFormFunction) {
   if (event) event.preventDefault(); 
 
-
   const usernameEl = document.getElementById("signup-username");
   const emailEl = document.getElementById("signup-email");
   const passwordEl = document.getElementById("signup-password");
@@ -13,7 +12,6 @@ async function signup(event, modal, loadFormFunction) {
     console.error("Signup form inputs missing in DOM!");
     return;
   }
-
   const username = usernameEl.value.trim();
   const email = emailEl.value.trim();
   const password = passwordEl.value.trim();
