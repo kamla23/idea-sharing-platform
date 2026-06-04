@@ -22,7 +22,7 @@ async function signup(event, modal, loadFormFunction) {
   }
 
   try {
-   
+  
     const res = await fetch(`${SIGNUP_API_URL}/api/auth/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
