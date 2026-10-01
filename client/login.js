@@ -1,6 +1,3 @@
-
-const LOGIN_API_URL = "https://idea-sharing-platform-backend.onrender.com";
-
 async function processLogin(event, modal) {
   if (event) event.preventDefault();
 
@@ -8,7 +5,7 @@ async function processLogin(event, modal) {
   const passwordEl = document.getElementById("login-password");
 
   if (!emailEl || !passwordEl) {
-    console.error("Login fields missing!");
+    console.error("Login fields missing in DOM!");
     return;
   }
 
@@ -16,72 +13,105 @@ async function processLogin(event, modal) {
   const password = passwordEl.value.trim();
 
   if (!email || !password) {
-    alert("All fields are required! ");
+    if (typeof showToast === "function") {
+      showToast("Email and password are required!", "error");
+    } else {
+      alert("Email and password are required!");
+    }
     return;
   }
 
+  const submitBtn = document.querySelector("#popupLoginForm button[type='submit']");
+  const originalBtnText = submitBtn ? submitBtn.innerText : "Sign In";
+  let slowTimer = null;
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Signing in...";
+    slowTimer = setTimeout(() => {
+      if (submitBtn && submitBtn.disabled) {
+        submitBtn.innerText = "Connecting to server...";
+      }
+    }, 2500);
+  }
+
   try {
-    const res = await fetch(`${LOGIN_API_URL}/api/auth/login`, {
+    const apiUrl = window.CONFIG ? window.CONFIG.getApiUrl() : "https://idea-sharing-platform-backend.onrender.com/api";
+    const res = await fetch(`${apiUrl}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "include", 
-      body: JSON.stringify({ email, password })
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
     });
 
     const data = await res.json().catch(() => ({}));
 
     if (res.ok) {
-      alert("Login successful! ");
-
-      localStorage.clear();
-
-     
-      let extractedToken = data.token || data.accessToken || (data.user && data.user.token) || "";
-
-    
-      localStorage.setItem("token", extractedToken);
-
-      let name = "Creator";
-      if (data.user) {
-         localStorage.setItem("user", JSON.stringify(data.user));
-         name = data.user.username || data.user.name || name;
-      } else if (data.username) {
-         name = data.username;
-         localStorage.setItem("user", JSON.stringify({ username: name }));
-      } else {
-         localStorage.setItem("user", JSON.stringify({ username: "User" }));
+      if (typeof showToast === "function") {
+        showToast("Login successful! Welcome back.", "success");
       }
-      
-      localStorage.setItem("user_login_name", name);
 
-      console.log("Token successfully captured in LocalStorage:", extractedToken ? " YES" : " NO");
+      const token = data.token || data.accessToken || (data.user && data.user.token) || "";
+      const user = data.user || { username: data.username || email.split("@")[0] };
 
-      if (modal) modal.style.display = "none"; 
-      
- 
-      window.location.replace("explore.html"); 
+      if (window.CONFIG) {
+        window.CONFIG.setAuthSession(token, user);
+      } else {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("user_login_name", user.username || "Creator");
+      }
+
+      if (modal) modal.style.display = "none";
+
+      setTimeout(() => {
+        if (window.location.pathname.includes("explore.html")) {
+          if (typeof window.checkNav === "function") window.checkNav();
+          if (typeof window.getIdeas === "function") window.getIdeas();
+          window.location.reload();
+        } else {
+          window.location.href = "explore.html";
+        }
+      }, 700);
     } else {
-      alert(data.message || data.error || "Invalid Credentials! ");
+      const msg = data.message || data.error || "Invalid Credentials! Please try again.";
+      if (typeof showToast === "function") {
+        showToast(msg, "error");
+      } else {
+        alert(msg);
+      }
     }
   } catch (err) {
     console.error("Login network error:", err);
-    alert("Server error: Connection failed!");
+    if (typeof showToast === "function") {
+      showToast("Server connection error! Please check your network.", "error");
+    } else {
+      alert("Server connection error!");
+    }
+  } finally {
+    if (slowTimer) clearTimeout(slowTimer);
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerText = originalBtnText;
+    }
   }
 }
 
 function initLogin(modal, loadFormFunction) {
-    const toSignup = document.getElementById("go-to-signup");
-    if (toSignup) {
-        toSignup.onclick = (e) => { 
-            e.preventDefault(); 
-            if (typeof loadFormFunction === "function") {
-               loadFormFunction("signup.html"); 
-            }
-         };
-    }
+  const toSignup = document.getElementById("go-to-signup");
+  if (toSignup) {
+    toSignup.onclick = (e) => {
+      e.preventDefault();
+      if (typeof loadFormFunction === "function") {
+        loadFormFunction("signup.html");
+      }
+    };
+  }
 
-    const loginForm = document.getElementById("popupLoginForm");
-    if (loginForm) {
-        loginForm.onsubmit = (e) => processLogin(e, modal);
-    }
+  const loginForm = document.getElementById("popupLoginForm");
+  if (loginForm) {
+    loginForm.onsubmit = (e) => processLogin(e, modal);
+  }
 }
+
+window.initLogin = initLogin;
+window.processLogin = processLogin;

@@ -1,15 +1,18 @@
-const API = "https://idea-sharing-platform-backend.onrender.com";
+
 
 fetch("navbar.html")
   .then((res) => {
-    if (!res.ok) throw new Error();
+    if (!res.ok) throw new Error("Navbar failed to load");
     return res.text();
   })
   .then((html) => {
-    document.getElementById("navbar").innerHTML = html;
-    checkNav();
-    initGlobalAuth();
-    setupHamburger();
+    const navEl = document.getElementById("navbar");
+    if (navEl) {
+      navEl.innerHTML = html;
+      checkNav();
+      initGlobalAuth();
+      setupHamburger();
+    }
   })
   .catch((err) => console.error("Navbar Load Error:", err));
 
@@ -21,12 +24,14 @@ function setupHamburger() {
     hamburger.onclick = () => {
       navLinksContainer.classList.toggle("active");
       const icon = hamburger.querySelector("i");
-      if (icon.classList.contains("fa-bars")) {
-        icon.classList.remove("fa-bars");
-        icon.classList.add("fa-xmark");
-      } else {
-        icon.classList.remove("fa-xmark");
-        icon.classList.add("fa-bars");
+      if (icon) {
+        if (icon.classList.contains("fa-bars")) {
+          icon.classList.remove("fa-bars");
+          icon.classList.add("fa-xmark");
+        } else {
+          icon.classList.remove("fa-xmark");
+          icon.classList.add("fa-bars");
+        }
       }
     };
   }
@@ -37,51 +42,49 @@ function initGlobalAuth() {
   const btnStart = document.getElementById("get-started-btn");
   const btnNavLog = document.getElementById("nav-login-btn");
 
-  if (btnStart) btnStart.onclick = () => loadForm("signup.html");
-  if (btnNavLog)
+  if (btnStart) {
+    btnStart.onclick = () => loadForm("signup.html");
+  }
+
+  if (btnNavLog) {
     btnNavLog.onclick = (e) => {
       e.preventDefault();
       loadForm("login.html");
     };
+  }
 
   function loadForm(file) {
-    if (!modal) return;
+    const authModal = document.getElementById("auth-modal");
+    if (!authModal) return;
+
     fetch(file)
       .then((res) => {
-        if (!res.ok) throw new Error();
+        if (!res.ok) throw new Error(`Could not load ${file}`);
         return res.text();
       })
       .then((html) => {
-        modal.innerHTML = html;
-        modal.style.display = "flex";
-        modal.style.background = "rgba(0,0,0,0.6)";
-        modal.style.zIndex = "2000";
-        modal.style.alignItems = "center";
-        modal.style.justifyContent = "center";
-        modal.style.backdropFilter = "blur(3px)";
+        authModal.innerHTML = html;
+        authModal.style.display = "flex";
+        authModal.style.background = "rgba(0,0,0,0.6)";
+        authModal.style.zIndex = "2000";
+        authModal.style.alignItems = "center";
+        authModal.style.justifyContent = "center";
+        authModal.style.backdropFilter = "blur(4px)";
 
-        setupPasswordToggle();
-        initClose();
+        setupPasswordToggle(authModal);
+        initClose(authModal);
 
-        if (
-          file === "signup.html" &&
-          typeof globalThis !== "undefined" &&
-          typeof globalThis.initSignup === "function"
-        ) {
-          globalThis.initSignup(modal, loadForm);
-        } else if (
-          file === "login.html" &&
-          typeof globalThis !== "undefined" &&
-          typeof globalThis.initLogin === "function"
-        ) {
-          globalThis.initLogin(modal, loadForm);
+        if (file === "signup.html" && typeof window.initSignup === "function") {
+          window.initSignup(authModal, loadForm);
+        } else if (file === "login.html" && typeof window.initLogin === "function") {
+          window.initLogin(authModal, loadForm);
         }
       })
-      .catch((err) => console.error("Popup Load Error:", err));
+      .catch((err) => console.error("Auth Popup Load Error:", err));
   }
 
-  function setupPasswordToggle() {
-    const eyeIcons = modal.querySelectorAll(".toggle-password");
+  function setupPasswordToggle(container) {
+    const eyeIcons = container.querySelectorAll(".toggle-password");
     eyeIcons.forEach((icon) => {
       icon.onclick = function () {
         const targetId = this.getAttribute("data-target");
@@ -101,13 +104,22 @@ function initGlobalAuth() {
     });
   }
 
-  function initClose() {
-    const closeBtn = document.getElementById("close-modal-btn");
-    if (closeBtn)
+  function initClose(container) {
+    const closeBtn = container.querySelector("#close-modal-btn");
+    if (closeBtn) {
       closeBtn.onclick = () => {
-        modal.style.display = "none";
+        container.style.display = "none";
       };
+    }
+
+    container.onclick = (e) => {
+      if (e.target === container) {
+        container.style.display = "none";
+      }
+    };
   }
+
+  window.openAuthModal = loadForm;
 }
 
 function checkNav() {
@@ -115,22 +127,24 @@ function checkNav() {
   const userNameElement = document.getElementById("user-name");
   const logoutLink = document.getElementById("logout-link");
 
-  const storedName = localStorage.getItem("user_login_name");
+  const storedName = window.CONFIG ? window.CONFIG.getUsername() : localStorage.getItem("user_login_name");
+  const isAuthenticated = window.CONFIG ? window.CONFIG.isAuthenticated() : Boolean(storedName);
 
-  if (storedName) {
+  if (isAuthenticated && storedName) {
     if (loginLink) loginLink.style.display = "none";
     if (userNameElement) {
       userNameElement.style.display = "flex";
-      userNameElement.innerText = storedName;
+      userNameElement.innerHTML = `<i class="fa-regular fa-user" style="margin-right:6px;"></i> ${window.CONFIG ? window.CONFIG.escapeHTML(storedName) : storedName}`;
     }
     if (logoutLink) {
       logoutLink.style.display = "block";
       const logoutBtn = document.getElementById("logout-btn");
-      if (logoutBtn)
+      if (logoutBtn) {
         logoutBtn.onclick = (e) => {
           e.preventDefault();
           doLogout();
         };
+      }
     }
   } else {
     if (loginLink) loginLink.style.display = "block";
@@ -141,23 +155,31 @@ function checkNav() {
 
 async function doLogout() {
   try {
-    const res = await fetch(`${API}/api/auth/logout`, {
+    const apiUrl = window.CONFIG ? window.CONFIG.getApiUrl() : "https://idea-sharing-platform-backend.onrender.com/api";
+    await fetch(`${apiUrl}/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
-    if (res.ok) {
-      showToast("Logged out successfully!", "success");
-
-      localStorage.clear();
-
-      setTimeout(() => {
-        window.location.reload();
-      }, 1200);
-    } else {
-      showToast("Logout failed!", "error");
-    }
   } catch (err) {
-    console.error("Logout Error:", err);
-    showToast("Something went wrong!", "error");
+    console.error("Logout network error:", err);
+  } finally {
+    if (window.CONFIG) {
+      window.CONFIG.clearAuthSession();
+    } else {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("user_login_name");
+    }
+
+    if (typeof showToast === "function") {
+      showToast("Logged out successfully!", "success");
+    }
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 800);
   }
 }
+
+window.checkNav = checkNav;
+window.doLogout = doLogout;

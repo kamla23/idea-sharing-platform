@@ -1,20 +1,17 @@
-import Idea from "../models/idea.model.js";
 
+import Idea from "../models/idea.model.js";
 
 export const createIdea = async (req, res) => {
   try {
     const { title, description, tags, category } = req.body;
 
- 
     if (!title || !description) {
       return res.status(400).json({ message: "Title and description are required" });
     }
 
-  
     if (title.length > 100) {
       return res.status(400).json({ message: "Title cannot exceed 100 characters" });
     }
-
 
     const newIdea = new Idea({
       title,
@@ -35,7 +32,6 @@ export const createIdea = async (req, res) => {
 
 export const getIdeas = async (req, res) => {
   try {
-
     const ideas = await Idea.find()
       .populate("author", "username email")
       .populate("comments.author", "username email")
@@ -59,24 +55,25 @@ export const toggleLikeIdea = async (req, res) => {
     }
 
     
-    const isLiked = idea.likes.includes(userId);
+    const isLiked = idea.likes.some((id) => id.toString() === userId.toString());
 
     if (isLiked) {
-    
-      idea.likes = idea.likes.filter((id) => id.toString() !== userId);
+
+      idea.likes = idea.likes.filter((id) => id.toString() !== userId.toString());
       await idea.save();
-      return res.status(200).json({ message: "Idea unliked", totalLikes: idea.likes.length });
+      return res.status(200).json({ message: "Idea unliked", totalLikes: idea.likes.length, likes: idea.likes });
     } else {
-      
+    
       idea.likes.push(userId);
       await idea.save();
-      return res.status(200).json({ message: "Idea liked", totalLikes: idea.likes.length });
+      return res.status(200).json({ message: "Idea liked", totalLikes: idea.likes.length, likes: idea.likes });
     }
 
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 export const addComment = async (req, res) => {
   try {
@@ -92,7 +89,6 @@ export const addComment = async (req, res) => {
       return res.status(404).json({ message: "Idea not found" });
     }
 
-    
     const newComment = {
       author: req.user.id, 
       text: text
@@ -100,6 +96,9 @@ export const addComment = async (req, res) => {
 
     idea.comments.push(newComment);
     await idea.save();
+
+  
+    await idea.populate("comments.author", "username email");
 
     res.status(201).json({ message: "Comment added successfully", comments: idea.comments });
 

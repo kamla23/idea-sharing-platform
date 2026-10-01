@@ -1,5 +1,3 @@
-
-
 <div class="modal-card">
   <button id="close-modal-btn" class="close-btn">&times;</button>
   
@@ -9,23 +7,22 @@
   <form id="popupSignupForm">
     <div class="form-group">
       <label>Username</label>
-      <input type="text" id="signup-username" class="form-control" placeholder="Choose a username" required>
+      <input type="text" id="signup-username" class="form-control" placeholder="Choose a username" required autocomplete="username">
     </div>
     
     <div class="form-group">
       <label>Email Address</label>
-      <input type="email" id="signup-email" class="form-control" placeholder="Enter your email.." required>
+      <input type="email" id="signup-email" class="form-control" placeholder="Enter your email.." required autocomplete="email">
     </div>
     
-   <div class="form-group" style="position: relative; margin-bottom: 15px;">
-    <label for="signup-password" style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">Password</label>
-    <input type="password" id="signup-password" placeholder="Create a password" required style="width: 100%; padding: 10px; padding-right: 40px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
-    <i class="fa-solid fa-eye toggle-password" data-target="signup-password" style="position: absolute; right: 12px; top: 38px; cursor: pointer; color: #64748b;"></i>
-</div>
+    <div class="form-group" style="position: relative; margin-bottom: 15px;">
+      <label for="signup-password" style="font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">Password</label>
+      <input type="password" id="signup-password" placeholder="Create a password (min 6 characters)" required autocomplete="new-password" style="width: 100%; padding: 10px; padding-right: 40px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;">
+      <i class="fa-solid fa-eye toggle-password" data-target="signup-password" style="position: absolute; right: 12px; top: 38px; cursor: pointer; color: #64748b;"></i>
+    </div>
     
     <button type="submit" class="btn-primary">Sign Up</button>
   </form>
   
-<p class="switch-auth">Already have an account? <a href="#" id="go-to-login">Login</a></p>
-</div>
+  <p class="switch-auth">Already have an account? <a href="#" id="go-to-login">Login</a></p>
 </div>

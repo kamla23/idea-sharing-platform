@@ -16,4 +16,4 @@ router.get("/profile", protect, (req, res) => {
 });
 router.get("/me", protect, getMe);
 router.post('/logout', logout);
-export default router;  
+export default router; 
